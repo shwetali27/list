@@ -3,15 +3,21 @@ package com.setup.list.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.setup.list.dto.User;
+import com.setup.servicecall.DetailsServiceCaller;
 
 @RestController
 @RequestMapping("/setup/list/")
 public class ListController {
+	
+	@Autowired
+	DetailsServiceCaller detailsServiceCaller;
+	
 	// http://localhost:8078/setup/list/users
 	@GetMapping(value="users")
 	public List<User> getUsers() {
@@ -37,6 +43,8 @@ public class ListController {
 				.profile("Test profile")
 				.mob("+00 9899271192")
 				.build());
+		
+		users.add(detailsServiceCaller.getUserDetails());
 		return users;
 	}
 	

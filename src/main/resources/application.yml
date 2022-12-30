@@ -5,3 +5,44 @@ eureka:
   client:
     enabled: true
     serviceUrl.defaultZone: http://localhost:8075/eureka
+   
+# for actuator. url: http://localhost:8078/actuator/health
+management:
+  endpoint:
+    health:
+      show-details: always # for circuit breaker resilience4j
+  endpoints:
+    web:
+      exposure:
+        include: health # for circuit breaker resilience4j
+  health:
+    circuitbreakers:
+      enabled: true # for circuit breaker resilience4j
+      
+# configuration for Circuit Breaker     
+resilience4j:
+  circuitbreaker:
+    instances:
+      detailsService: # this is same as circuit breaker name.
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpentoHalfOpen: true
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+  retry: # configuration for Retry (Using resilience4j)
+    instances:
+      detailsService: # this is same as name given in @Retry
+        registerHealthIndicator: true
+        maxRetryAttempts: 5
+        waitDuration: 10s
+  ratelimiter: # configuration for Rate limiter (Using resilience4j)
+    instances:
+      detailsService: # this is same as name given in @RateLimiter
+        registerHealthIndicator: false
+        limitForPeriod: 10
+        limitRefreshPeriod: 10s
+        timeoutDuration: 100s
