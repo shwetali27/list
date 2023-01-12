@@ -22,8 +22,12 @@
 			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-netflix-eureka-client</artifactId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
 
 		<!-- to include application name from bootstrap.yml -->
@@ -54,6 +58,25 @@
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
 		<!--  Circuit breaker dependency for fallback logic end-->
+
+		<!-- connecting to proxy server using feign client start
+		Note: make sure we have spring-boot-starter-web, 
+				and spring-boot-starter-webflux added in pom.
+		-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
+		<!-- connecting to proxy server using feign client end-->
+
+		<!-- for auto build -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+
 	</dependencies>
 
 	<dependencyManagement>

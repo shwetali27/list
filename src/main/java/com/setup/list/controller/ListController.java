@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.setup.list.dto.User;
+import com.setup.list.dto.Users;
 import com.setup.servicecall.DetailsServiceCaller;
 
 @RestController
@@ -46,6 +47,11 @@ public class ListController {
 		
 		users.add(detailsServiceCaller.getUserDetails());
 		return users;
+	}
+	
+	@GetMapping(value="db-users")
+	public List<Users> getDbUsers(){
+		return detailsServiceCaller.getAllDbUsers();
 	}
 	
 }
