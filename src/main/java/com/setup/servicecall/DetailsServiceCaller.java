@@ -1,5 +1,8 @@
 package com.setup.servicecall;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +24,7 @@ public class DetailsServiceCaller {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	static final String DETAILS_BASEURL = "lb:details";
+	static final String DETAILS_BASEURL = "lb://details";
 	private static final String DETAILS_SERVICE = "detailsService";
 	
 	int retryCount = 1;
@@ -32,7 +35,7 @@ public class DetailsServiceCaller {
 	 @Retry(name = DETAILS_SERVICE, fallbackMethod = "fallBackDetailsMethod")
 	 
 // ------------------ Rate Limiter -------------
-	@RateLimiter(name = DETAILS_SERVICE)
+//	@RateLimiter(name = DETAILS_SERVICE)
 	public User getUserDetails() {
 		System.out.println("Retry call count " + retryCount++ +" "+ new Date());
 		User user = null;
@@ -52,8 +55,20 @@ public class DetailsServiceCaller {
 
 	@Autowired
 	private DetailsProxyServer detailsProxyServer;
-	
+	@CircuitBreaker(name = DETAILS_SERVICE, fallbackMethod = "fallBackListMethod")
+//	@Retry(name = DETAILS_SERVICE, fallbackMethod = "fallBackListMethod")
 	public List<Users> getAllDbUsers(){
 		return detailsProxyServer.getAllUsers();
+	}
+	
+	public List<Users> fallBackListMethod(Exception e) {
+		List<Users> users = new ArrayList<Users>();
+		users.add(Users.builder().userId(00)
+				.name("fallback user")
+				.email("fbu@email.com")
+				.birthdate(null)
+				.createdOn(Timestamp.valueOf(LocalDateTime.now()))
+				.build());
+		return users;
 	}
 }

@@ -39,6 +39,7 @@ resilience4j:
         registerHealthIndicator: true
         maxRetryAttempts: 5
         waitDuration: 10s
+        enableExponentialBackoff: true #first attempt 10s, next attempt 10+ seconds and so on. wait time will increase exponentialy
   ratelimiter: # configuration for Rate limiter (Using resilience4j)
     instances:
       detailsService: # this is same as name given in @RateLimiter
